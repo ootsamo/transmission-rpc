@@ -8,7 +8,7 @@ let package = Package(
 		.library(
 			name: "TransmissionRPC",
 			targets: ["TransmissionRPC"]
-		),
+		)
 	],
 	targets: [
 		.target(
