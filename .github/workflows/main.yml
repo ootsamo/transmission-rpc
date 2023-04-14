@@ -1,6 +1,12 @@
 name: Main
 on: push
 jobs:
+  lint:
+    name: Lint
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: swiftlint --strict
   test:
     name: Run unit tests
     runs-on: macos-latest

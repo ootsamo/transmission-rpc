@@ -1,0 +1,159 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		276C8F8429EA0E8A009CD240 /* TransmissionRPC */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 276C8F8529EA0E8A009CD240 /* Build configuration list for PBXAggregateTarget "TransmissionRPC" */;
+			buildPhases = (
+				276C8F8A29EA0EB2009CD240 /* ShellScript */,
+			);
+			dependencies = (
+				276C8F8929EA0EA6009CD240 /* PBXTargetDependency */,
+			);
+			name = TransmissionRPC;
+			productName = TransmissionRPC;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXFileReference section */
+		276C8F8329EA0E74009CD240 /* transmission-rpc */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "transmission-rpc"; path = ..; sourceTree = "<group>"; };
+		276C8F8B29EA0F90009CD240 /* Tests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tests.xctestplan; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		276C8F7B29EA0E6E009CD240 = {
+			isa = PBXGroup;
+			children = (
+				276C8F8329EA0E74009CD240 /* transmission-rpc */,
+				276C8F8B29EA0F90009CD240 /* Tests.xctestplan */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		276C8F7C29EA0E6E009CD240 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					276C8F8429EA0E8A009CD240 = {
+						CreatedOnToolsVersion = 14.3;
+					};
+				};
+			};
+			buildConfigurationList = 276C8F7F29EA0E6E009CD240 /* Build configuration list for PBXProject "Linter" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 276C8F7B29EA0E6E009CD240;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				276C8F8429EA0E8A009CD240 /* TransmissionRPC */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		276C8F8A29EA0EB2009CD240 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\n\nif which swiftlint >/dev/null; then\n\tswiftlint ..\nelse\n\techo \"warning: SwiftLint is not installed\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		276C8F8929EA0EA6009CD240 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 276C8F8829EA0EA6009CD240 /* TransmissionRPC */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		276C8F8029EA0E6E009CD240 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		276C8F8129EA0E6E009CD240 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		276C8F8629EA0E8A009CD240 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = VSAP3MLLCD;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		276C8F8729EA0E8A009CD240 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = VSAP3MLLCD;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		276C8F7F29EA0E6E009CD240 /* Build configuration list for PBXProject "Linter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				276C8F8029EA0E6E009CD240 /* Debug */,
+				276C8F8129EA0E6E009CD240 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		276C8F8529EA0E8A009CD240 /* Build configuration list for PBXAggregateTarget "TransmissionRPC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				276C8F8629EA0E8A009CD240 /* Debug */,
+				276C8F8729EA0E8A009CD240 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		276C8F8829EA0EA6009CD240 /* TransmissionRPC */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TransmissionRPC;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 276C8F7C29EA0E6E009CD240 /* Project object */;
+}
