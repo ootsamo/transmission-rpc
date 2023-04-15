@@ -19,7 +19,7 @@ public class TransmissionClient {
 		components.path = path
 
 		guard let url = components.url else {
-			throw TransmissionError.invalidURL
+			throw TransmissionError.invalidURLComponents
 		}
 
 		self.init(url: url, credentials: credentials)
@@ -27,9 +27,12 @@ public class TransmissionClient {
 
 	private func send<T: Method>(method: T) async throws -> T.Response {
 		if networking.apiVersion == nil {
-			let session = try await networking.send(method: GetSessionMethod()).session
-			networking.apiVersion = session.apiVersion
+			networking.apiVersion = try await networking.send(method: GetApiVersionMethod()).apiVersion
 		}
 		return try await networking.send(method: method)
+	}
+
+	public func getSession() async throws -> Session {
+		try await send(method: GetSessionMethod()).session
 	}
 }
