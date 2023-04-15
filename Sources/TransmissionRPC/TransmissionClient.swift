@@ -24,4 +24,12 @@ public class TransmissionClient {
 
 		self.init(url: url, credentials: credentials)
 	}
+
+	private func send<T: Method>(method: T) async throws -> T.Response {
+		if networking.apiVersion == nil {
+			let session = try await networking.send(method: GetSessionMethod()).session
+			networking.apiVersion = session.apiVersion
+		}
+		return try await networking.send(method: method)
+	}
 }
