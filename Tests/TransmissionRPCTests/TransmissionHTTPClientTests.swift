@@ -17,7 +17,7 @@ final class TransmissionHTTPClientTests: XCTestCase {
 		let configuration = URLSessionConfiguration.default
 		configuration.protocolClasses = [MockURLProtocol.self]
 		let urlSession = URLSession(configuration: configuration)
-		return TransmissionHTTPClient(url: url, urlSession: urlSession)
+		return TransmissionHTTPClient(url: url, credentials: nil, urlSession: urlSession)
 	}()
 
 	override class func tearDown() {
