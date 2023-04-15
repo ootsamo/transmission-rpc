@@ -1,4 +1,4 @@
-public protocol Method: Encodable {
+protocol Method: Encodable {
 	associatedtype Response: Decodable
 
 	static var name: String { get }
