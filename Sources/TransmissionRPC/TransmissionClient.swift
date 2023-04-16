@@ -1,6 +1,8 @@
 import Foundation
 
 public class TransmissionClient {
+	private static let minimumApiVersion = 16
+
 	private let networking: Networking
 
 	init(networking: Networking) {
@@ -27,7 +29,11 @@ public class TransmissionClient {
 
 	private func send<T: Method>(method: T) async throws -> T.Response {
 		if networking.apiVersion == nil {
-			networking.apiVersion = try await networking.send(method: GetApiVersionMethod()).apiVersion
+			let apiVersion = try await networking.send(method: GetApiVersionMethod()).apiVersion
+			if apiVersion < Self.minimumApiVersion {
+				throw TransmissionError.unsupportedApiVersion(version: apiVersion)
+			}
+			networking.apiVersion = apiVersion
 		}
 		return try await networking.send(method: method)
 	}
