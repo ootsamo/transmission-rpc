@@ -18,6 +18,11 @@ class HTTPNetworking: Networking {
 
 	private var sessionId: String?
 
+	var apiVersion: Int? {
+		get { jsonDecoder.userInfo[.apiVersion] as? Int }
+		set { jsonDecoder.userInfo[.apiVersion] = newValue }
+	}
+
 	init(url: URL, credentials: Credentials?, urlSession: URLSession = .shared) {
 		self.url = url
 		self.credentials = credentials
@@ -72,4 +77,13 @@ class HTTPNetworking: Networking {
 	private func refreshSessionId(from response: HTTPURLResponse) {
 		sessionId = response.value(forHTTPHeaderField: HeaderName.sessionId)
 	}
+}
+
+extension CodingUserInfoKey {
+	static let apiVersion = {
+		guard let key = Self(rawValue: "apiVersion") else {
+			fatalError("Unable to create apiVersion CodingUserInfoKey")
+		}
+		return key
+	}()
 }

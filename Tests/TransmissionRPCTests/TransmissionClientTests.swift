@@ -6,7 +6,7 @@ final class TransmissionClientTests: XCTestCase {
 		XCTAssertNoThrow(try TransmissionClient(host: "example.com", path: "/dev/null"))
 
 		XCTAssertThrowsError(try TransmissionClient(host: "example.com", path: "dev/null")) {
-			guard case .invalidURL = $0 as? TransmissionError else {
+			guard case .invalidURLComponents = $0 as? TransmissionError else {
 				XCTFail("Incorrect error thrown: \($0)")
 				return
 			}

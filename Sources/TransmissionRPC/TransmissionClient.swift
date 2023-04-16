@@ -1,6 +1,8 @@
 import Foundation
 
 public class TransmissionClient {
+	private static let minimumApiVersion = 16
+
 	private let networking: Networking
 
 	init(networking: Networking) {
@@ -19,9 +21,24 @@ public class TransmissionClient {
 		components.path = path
 
 		guard let url = components.url else {
-			throw TransmissionError.invalidURL
+			throw TransmissionError.invalidURLComponents
 		}
 
 		self.init(url: url, credentials: credentials)
+	}
+
+	private func send<T: Method>(method: T) async throws -> T.Response {
+		if networking.apiVersion == nil {
+			let apiVersion = try await networking.send(method: GetApiVersionMethod()).apiVersion
+			if apiVersion < Self.minimumApiVersion {
+				throw TransmissionError.unsupportedApiVersion(version: apiVersion)
+			}
+			networking.apiVersion = apiVersion
+		}
+		return try await networking.send(method: method)
+	}
+
+	public func getSession() async throws -> Session {
+		try await send(method: GetSessionMethod()).session
 	}
 }
