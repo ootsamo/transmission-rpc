@@ -13,7 +13,7 @@ enum Response<T: Decodable>: Decodable {
 
 		switch result {
 		case "success":
-			self = .success(try container.decode(T.self, forKey: .arguments))
+			self = .success(try container.decode(forKey: .arguments))
 		default:
 			self = .failure(result)
 		}

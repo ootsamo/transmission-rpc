@@ -21,11 +21,11 @@ public struct VersionInformation: Decodable {
 
 	public init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
-		apiVersion = try container.decode(Int.self, forKey: .apiVersion)
+		apiVersion = try container.decode(forKey: .apiVersion)
 		_optionalSemanticApiVersion = try ApiVersionRequirement(current: apiVersion, required: 17) {
-			try container.decode(SemanticVersion.self, forKey: .semanticApiVersion)
+			try container.decode(forKey: .semanticApiVersion)
 		}
-		minimumApiVersion = try container.decode(Int.self, forKey: .minimumApiVersion)
-		version = try container.decode(String.self, forKey: .version)
+		minimumApiVersion = try container.decode(forKey: .minimumApiVersion)
+		version = try container.decode(forKey: .version)
 	}
 }

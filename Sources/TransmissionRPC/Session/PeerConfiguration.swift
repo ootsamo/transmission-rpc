@@ -34,12 +34,12 @@ public struct PeerConfiguration: Decodable {
 	public init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 		blocklistInfo = try PeerBlocklistInfo(from: decoder)
-		encryption = try container.decode(PeerEncryptionConfiguration.self, forKey: .encryption)
-		dhtEnabled = try container.decode(Bool.self, forKey: .dhtEnabled)
-		lpdEnabled = try container.decode(Bool.self, forKey: .lpdEnabled)
-		pexEnabled = try container.decode(Bool.self, forKey: .pexEnabled)
-		globalPeerLimit = try container.decode(Int.self, forKey: .globalPeerLimit)
-		transferPeerLimit = try container.decode(Int.self, forKey: .transferPeerLimit)
+		encryption = try container.decode(forKey: .encryption)
+		dhtEnabled = try container.decode(forKey: .dhtEnabled)
+		lpdEnabled = try container.decode(forKey: .lpdEnabled)
+		pexEnabled = try container.decode(forKey: .pexEnabled)
+		globalPeerLimit = try container.decode(forKey: .globalPeerLimit)
+		transferPeerLimit = try container.decode(forKey: .transferPeerLimit)
 	}
 }
 
@@ -61,9 +61,9 @@ public struct PeerBlocklistInfo: Decodable {
 
 	public init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
-		url = try container.decode(URL.self, forKey: .url)
-		enabled = try container.decode(Bool.self, forKey: .enabled)
-		ruleCount = try container.decode(Int.self, forKey: .ruleCount)
+		url = try container.decode(forKey: .url)
+		enabled = try container.decode(forKey: .enabled)
+		ruleCount = try container.decode(forKey: .ruleCount)
 	}
 }
 

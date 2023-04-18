@@ -38,26 +38,26 @@ public struct BandwidthConfiguration: Decodable {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 
 		standardLimits = BandwidthLimits(
-			up: try container.decode(Int.self, forKey: .uploadLimit),
-			down: try container.decode(Int.self, forKey: .downloadLimit)
+			up: try container.decode(forKey: .uploadLimit),
+			down: try container.decode(forKey: .downloadLimit)
 		)
 
 		alternativeLimits = BandwidthLimits(
-			up: try container.decode(Int.self, forKey: .alternativeDownloadLimit),
-			down: try container.decode(Int.self, forKey: .alternativeUploadLimit)
+			up: try container.decode(forKey: .alternativeDownloadLimit),
+			down: try container.decode(forKey: .alternativeUploadLimit)
 		)
 
-		uploadLimitEnabled = try container.decode(Bool.self, forKey: .uploadLimitEnabled)
-		downloadLimitEnabled = try container.decode(Bool.self, forKey: .downloadLimitEnabled)
-		alternativeLimitsEnabled = try container.decode(Bool.self, forKey: .alternativeLimitsEnabled)
+		uploadLimitEnabled = try container.decode(forKey: .uploadLimitEnabled)
+		downloadLimitEnabled = try container.decode(forKey: .downloadLimitEnabled)
+		alternativeLimitsEnabled = try container.decode(forKey: .alternativeLimitsEnabled)
 
 		alternativeLimitsSchedule = BandwidthLimitSchedule(
-			days: BandwidthLimitSchedule.Weekday(rawValue: try container.decode(Int.self, forKey: .alternativeLimitsScheduleDays)),
-			startTime: try container.decode(Int.self, forKey: .alternativeLimitsScheduleStartTime),
-			endTime: try container.decode(Int.self, forKey: .alternativeLimitsScheduleEndTime)
+			days: BandwidthLimitSchedule.Weekday(rawValue: try container.decode(forKey: .alternativeLimitsScheduleDays)),
+			startTime: try container.decode(forKey: .alternativeLimitsScheduleStartTime),
+			endTime: try container.decode(forKey: .alternativeLimitsScheduleEndTime)
 		)
 
-		alternativeLimitsScheduleEnabled = try container.decode(Bool.self, forKey: .alternativeLimitsScheduleEnabled)
+		alternativeLimitsScheduleEnabled = try container.decode(forKey: .alternativeLimitsScheduleEnabled)
 	}
 }
 

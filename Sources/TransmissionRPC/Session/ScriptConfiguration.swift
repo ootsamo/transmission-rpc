@@ -14,8 +14,8 @@ public struct ScriptConfiguration: Decodable {
 
 		init(from decoder: Decoder, enabledKey: CodingKeys, pathKey: CodingKeys) throws {
 			let container = try decoder.container(keyedBy: CodingKeys.self)
-			enabled = try container.decode(Bool.self, forKey: enabledKey)
-			path = try container.decode(String.self, forKey: pathKey)
+			enabled = try container.decode(forKey: enabledKey)
+			path = try container.decode(forKey: pathKey)
 		}
 	}
 
