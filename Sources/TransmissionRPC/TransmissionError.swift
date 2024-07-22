@@ -1,6 +1,6 @@
 import Foundation
 
-public enum TransmissionError: LocalizedError {
+public enum TransmissionError: LocalizedError, Equatable {
 	case invalidURLComponents
 	case invalidURL(String)
 	case nonHTTPResponse

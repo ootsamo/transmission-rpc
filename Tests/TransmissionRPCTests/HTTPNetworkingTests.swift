@@ -1,64 +1,59 @@
-import XCTest
+import Testing
+import Foundation
 @testable import TransmissionRPC
 
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
 
-final class HTTPNetworkingTests: XCTestCase {
-	private let url = {
-		guard let url = URL(string: "http://example.com") else {
-			fatalError("Unable to create URL")
-		}
-		return url
-	}()
+@Suite(.serialized)
+final class HTTPNetworkingTests {
+	private let url: URL
+	private let networking: HTTPNetworking
 
-	private lazy var networking = {
+	init() throws {
+		url = try #require(URL(string: "http://example.com"))
+
 		let configuration = URLSessionConfiguration.default
 		configuration.protocolClasses = [MockURLProtocol.self]
 		let urlSession = URLSession(configuration: configuration)
-		return HTTPNetworking(url: url, credentials: nil, urlSession: urlSession)
-	}()
-
-	override static func tearDown() {
-		MockURLProtocol.handlers.removeAll()
+		networking = HTTPNetworking(url: url, credentials: nil, urlSession: urlSession)
 	}
 
-	func testSuccessResponse() async throws {
+	@Test("Success response is handled correctly")
+	func successResponse() async throws {
 		let data = Data(#"{"result": "success", "arguments": {"argument": 3}}"#.utf8)
-		let httpResponse = createResponse()
+		let httpResponse = try createResponse()
 
-		let handler: MockURLProtocol.Handler = { _ in (httpResponse, data) }
-		MockURLProtocol.handlers.append(handler)
-
+		MockURLProtocol.handlers = [{ _ in (httpResponse, data) }]
 		let response = try await networking.send(method: SampleMethod())
-		XCTAssertEqual(response.argument, 3)
+
+		assert(response.argument == 3)
 	}
 
-	func testFailureResponse() async throws {
+	@Test("Failure response is handled correctly")
+	func failureResponse() async throws {
 		let errorMessage = "Something went wrong"
 		let data = Data(#"{"result": "\#(errorMessage)", "arguments": []}"#.utf8)
-		let httpResponse = createResponse()
+		let httpResponse = try createResponse()
 
-		let handler: MockURLProtocol.Handler = { _ in (httpResponse, data) }
-		MockURLProtocol.handlers.append(handler)
+		MockURLProtocol.handlers = [{ _ in (httpResponse, data) }]
 
-		do {
-			_ = try await networking.send(method: SampleMethod())
-			XCTFail("Call did not throw an error")
-		} catch {
+		await #expect {
+			try await networking.send(method: SampleMethod())
+		} throws: { error in
 			guard case .failureResponse(let message) = error as? TransmissionError else {
-				XCTFail("Incorrect error thrown: \(error)")
-				return
+				return false
 			}
-			XCTAssertEqual(message, errorMessage)
+			return message == errorMessage
 		}
 	}
 
-	private func createResponse(statusCode: Int = 200, headerFields: [String: String]? = nil) -> HTTPURLResponse {
-		guard let response = HTTPURLResponse(url: url, statusCode: statusCode, httpVersion: nil, headerFields: headerFields) else {
-			fatalError("Unable to create HTTP response")
-		}
-		return response
+	private func createResponse(statusCode: Int = 200, headerFields: [String: String]? = nil) throws -> HTTPURLResponse {
+		try #require(HTTPURLResponse(url: url, statusCode: statusCode, httpVersion: nil, headerFields: headerFields))
+	}
+
+	deinit {
+		MockURLProtocol.handlers.removeAll()
 	}
 }
