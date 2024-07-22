@@ -20,7 +20,7 @@ final class HTTPNetworkingTests: XCTestCase {
 		return HTTPNetworking(url: url, credentials: nil, urlSession: urlSession)
 	}()
 
-	override class func tearDown() {
+	override static func tearDown() {
 		MockURLProtocol.handlers.removeAll()
 	}
 
