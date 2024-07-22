@@ -1,4 +1,6 @@
-public struct BandwidthConfiguration: Decodable {
+import Foundation
+
+public struct BandwidthConfiguration: DecodableWithConfiguration {
 	enum CodingKeys: String, CodingKey {
 		case uploadLimit = "speed-limit-up"
 		case downloadLimit = "speed-limit-down"
@@ -13,38 +15,39 @@ public struct BandwidthConfiguration: Decodable {
 		case alternativeLimitsScheduleEnabled = "alt-speed-time-enabled"
 	}
 
-	/// Speed limits to use when alternative limits are not active.
-	public let standardLimits: BandwidthLimits
+	/// The transfer rate limits to use when alternative limits are not enabled.
+	public let standardLimits: TransferRates
 
-	/// Alternative speed limits.
-	public let alternativeLimits: BandwidthLimits
+	/// The transfer rate limits to use when alternative limits are enabled.
+	public let alternativeLimits: TransferRates
 
-	/// Indicates whether upload speed limit is enabled.
+	/// A boolean value indicating whether the standard upload rate limit is enabled.
 	public let uploadLimitEnabled: Bool
 
-	/// Indicates whether download speed limit is enabled.
+	/// A boolean value indicating whether the standard download rate limit is enabled.
 	public let downloadLimitEnabled: Bool
 
-	/// Indicates whether alternative speed limits are currently overriding the standard limits.
+	/// A boolean value indicating whether alternative transfer rate limits are currently overriding the standard limits.
 	public let alternativeLimitsEnabled: Bool
 
-	/// Schedule when alternative speed limits are active.
+	/// A schedule that describes when alternative transfer rate limits should be enabled.
 	public let alternativeLimitsSchedule: BandwidthLimitSchedule
 
-	/// Indicates whether the alternative speed limit schedule is enabled.
+	/// A boolean value indicating whether the alternative transfer rate limit schedule is enabled.
 	public let alternativeLimitsScheduleEnabled: Bool
 
-	public init(from decoder: Decoder) throws {
+	public init(from decoder: Decoder, configuration units: SessionUnits) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
+		let kiloMultiplier = units.speed.kiloMultiplier
 
-		standardLimits = BandwidthLimits(
-			up: try container.decode(forKey: .uploadLimit),
-			down: try container.decode(forKey: .downloadLimit)
+		standardLimits = TransferRates(
+			up: try container.decode(forKey: .uploadLimit) * kiloMultiplier,
+			down: try container.decode(forKey: .downloadLimit) * kiloMultiplier
 		)
 
-		alternativeLimits = BandwidthLimits(
-			up: try container.decode(forKey: .alternativeDownloadLimit),
-			down: try container.decode(forKey: .alternativeUploadLimit)
+		alternativeLimits = TransferRates(
+			up: try container.decode(forKey: .alternativeDownloadLimit) * kiloMultiplier,
+			down: try container.decode(forKey: .alternativeUploadLimit) * kiloMultiplier
 		)
 
 		uploadLimitEnabled = try container.decode(forKey: .uploadLimitEnabled)
@@ -59,14 +62,6 @@ public struct BandwidthConfiguration: Decodable {
 
 		alternativeLimitsScheduleEnabled = try container.decode(forKey: .alternativeLimitsScheduleEnabled)
 	}
-}
-
-public struct BandwidthLimits {
-	/// Upload speed limit in kilobytes per second.
-	public let up: Int
-
-	/// Download speed limit in kilobytes per second.
-	public let down: Int
 }
 
 public struct BandwidthLimitSchedule {

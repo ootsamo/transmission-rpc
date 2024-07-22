@@ -1,6 +1,12 @@
 import Foundation
 
 public struct Session: Decodable {
+	enum CodingKeys: String, CodingKey {
+		case units
+	}
+
+	public let units: SessionUnits
+
 	/// List of default tracker URLs.
 	public var defaultTrackers: TrackerConfiguration { get throws { try _optionalDefaultTrackers.unwrappedValue }}
 	@ApiVersionRequirement var optionalDefaultTrackers: TrackerConfiguration?
@@ -25,12 +31,15 @@ public struct Session: Decodable {
 
 	public init(from decoder: Decoder) throws {
 		let apiVersion = decoder.userInfo[.apiVersion] as? Int
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+
+		units = try container.decode(forKey: .units)
 		_optionalDefaultTrackers = try ApiVersionRequirement(current: apiVersion, required: 17) {
 			try TrackerConfiguration(from: decoder)
 		}
 		peerConfiguration = try PeerConfiguration(from: decoder)
 		transferConfiguration = try TransferConfiguration(from: decoder)
-		bandwidthConfiguration = try BandwidthConfiguration(from: decoder)
+		bandwidthConfiguration = try BandwidthConfiguration(from: decoder, configuration: units)
 		seedingConfiguration = try SeedingConfiguration(from: decoder)
 		scriptConfiguration = try ScriptConfiguration(from: decoder)
 		versionInformation = try VersionInformation(from: decoder)

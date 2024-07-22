@@ -7,7 +7,7 @@ public struct TrackerConfiguration: Decodable {
 
 	public struct Tier {
 		/// A list of trackers in this tier.
-		public let trackers: [Tracker]
+		public let trackers: [URLString]
 	}
 
 	/// A list of trackers grouped by tier, where the first tier has the highest priority.
@@ -21,21 +21,7 @@ public struct TrackerConfiguration: Decodable {
 			.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
 			.filter { !$0.isEmpty }
 			.map {
-				Tier(trackers: $0.components(separatedBy: "\n").map(Tracker.init))
+				Tier(trackers: $0.components(separatedBy: "\n").map(URLString.init))
 			}
-	}
-}
-
-public struct Tracker {
-	let urlString: String
-
-	/// The announce URL for this tracker.
-	public var url: URL {
-		get throws {
-			guard let url = URL(string: urlString) else {
-				throw TransmissionError.invalidURL(urlString)
-			}
-			return url
-		}
 	}
 }
