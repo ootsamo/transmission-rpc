@@ -41,4 +41,8 @@ public class TransmissionClient {
 	public func getSession() async throws -> Session {
 		try await send(method: GetSessionMethod()).session
 	}
+
+	public func getTorrents(_ filter: TorrentFilter = .all) async throws -> [Torrent] {
+		try await send(method: GetTorrentMethod(filter: filter)).torrents
+	}
 }
