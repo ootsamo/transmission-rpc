@@ -1,16 +1,10 @@
-@propertyWrapper
-enum ApiVersionRequirement<T> {
+enum VersionGatedProperty<T> {
 	case value(T)
 	case notImplemented(currentVersion: Version?, requiredVersion: Version)
 
 	typealias Version = Int
 
-	var wrappedValue: T? {
-		guard case .value(let value) = self else { return nil }
-		return value
-	}
-
-	var unwrappedValue: T {
+	var unwrapped: T {
 		get throws {
 			switch self {
 			case .value(let value):

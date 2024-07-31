@@ -46,8 +46,8 @@ public struct TorrentProgress: DecodableWithConfiguration {
 	public let uploadRatio: Double
 
 	/// The fraction of the whole torrent that has been downloaded.
-	public var completeFraction: Double { get throws { try _optionalCompleteFraction.unwrappedValue }}
-	@ApiVersionRequirement var optionalCompleteFraction: Double?
+	@VersionRequirement(17)
+	public var completeFraction: Double
 
 	/// The fraction of wanted files that has been downloaded.
 	public let doneFraction: Double
@@ -73,7 +73,7 @@ public struct TorrentProgress: DecodableWithConfiguration {
 		bytesPendingAndAvailable = try container.decode(forKey: .bytesPendingAndAvailable)
 		bytesWanted = try container.decode(forKey: .bytesWanted)
 		uploadRatio = try container.decode(forKey: .uploadRatio)
-		_optionalCompleteFraction = try ApiVersionRequirement(current: apiVersion, required: 17) {
+		_completeFraction = try Self.completeFraction(apiVersion: apiVersion) {
 			try container.decode(forKey: .completeFraction)
 		}
 		doneFraction = try container.decode(forKey: .doneFraction)

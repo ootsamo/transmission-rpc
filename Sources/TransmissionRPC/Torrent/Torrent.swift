@@ -56,8 +56,8 @@ public struct Torrent: Decodable {
 	public let settings: TorrentSettings
 
 	/// The group the torrent is assigned to.
-	public var group: String { get throws { try _optionalGroup.unwrappedValue }}
-	@ApiVersionRequirement var optionalGroup: String?
+	@VersionRequirement(17)
+	public var group: String
 
 	/// A list of labels assigned to the torrent.
 	public let labels: [String]
@@ -69,8 +69,8 @@ public struct Torrent: Decodable {
 	public let creator: String
 
 	/// The primary MIME type of the files in the torrent.
-	public var primaryMimeType: String { get throws { try _optionalPrimaryMimeType.unwrappedValue }}
-	@ApiVersionRequirement var optionalPrimaryMimeType: String?
+	@VersionRequirement(17)
+	public var primaryMimeType: String
 
 	/// The date the torrent was created.
 	public let creationDate: Date?
@@ -109,8 +109,8 @@ public struct Torrent: Decodable {
 	public let files: [File]
 
 	/// Availability information for each piece of the torrent.
-	public var availability: TorrentAvailability { get throws { try _optionalAvailability.unwrappedValue }}
-	@ApiVersionRequirement var optionalAvailability: TorrentAvailability?
+	@VersionRequirement(17)
+	public var availability: TorrentAvailability
 
 	/// The current state of the torrent.
 	public let state: TorrentState
@@ -150,15 +150,13 @@ public struct Torrent: Decodable {
 		magnetURI = try container.decode(forKey: .magnetURI)
 		name = try container.decode(forKey: .name)
 		settings = try TorrentSettings(from: decoder)
-
-		_optionalGroup = try ApiVersionRequirement(current: apiVersion, required: 17) {
+		_group = try Self.group(apiVersion: apiVersion) {
 			try container.decode(forKey: .group)
 		}
-
 		labels = try container.decode(forKey: .labels)
 		comment = try container.decode(forKey: .comment)
 		creator = try container.decode(forKey: .creator)
-		_optionalPrimaryMimeType = try ApiVersionRequirement(current: apiVersion, required: 17) {
+		_primaryMimeType = try Self.primaryMimeType(apiVersion: apiVersion) {
 			try container.decode(forKey: .primaryMimeType)
 		}
 		creationDate = try container.decode(forKey: .creationDate)
@@ -175,7 +173,7 @@ public struct Torrent: Decodable {
 		nextAllowedAnnounceTime = try container.decode(forKey: .nextAllowedAnnounceTime)
 
 		files = try File.files(from: decoder)
-		_optionalAvailability = try ApiVersionRequirement(current: apiVersion, required: 17) {
+		_availability = try Self.availability(apiVersion: apiVersion) {
 			try container.decode(forKey: .availability)
 		}
 		state = try container.decode(forKey: .state, configuration: .init(

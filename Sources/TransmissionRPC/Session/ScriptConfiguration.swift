@@ -20,19 +20,19 @@ public struct ScriptConfiguration: Decodable {
 	}
 
 	/// The script to run when a new transfer is added.
-	public var transferAdded: Script { get throws { try _optionalTransferAdded.unwrappedValue }}
-	@ApiVersionRequirement var optionalTransferAdded: Script?
+	@VersionRequirement(17)
+	public var transferAdded: Script
 
 	/// The script to run when a transfer finishes downloading.
 	public let transferDoneDownloading: Script
 
 	/// The script to run when a transfer finishes seeding.
-	public var transferDoneSeeding: Script { get throws { try _optionalTransferDoneSeeding.unwrappedValue }}
-	@ApiVersionRequirement var optionalTransferDoneSeeding: Script?
+	@VersionRequirement(17)
+	public var transferDoneSeeding: Script
 
 	public init(from decoder: Decoder) throws {
 		let apiVersion = decoder.userInfo[.apiVersion] as? Int
-		_optionalTransferAdded = try ApiVersionRequirement(current: apiVersion, required: 17) {
+		_transferAdded = try Self.transferAdded(apiVersion: apiVersion) {
 			try Script(
 				from: decoder,
 				enabledKey: .transferAddedEnabled,
@@ -44,7 +44,7 @@ public struct ScriptConfiguration: Decodable {
 			enabledKey: .transferDoneDownloadingEnabled,
 			pathKey: .transferDoneDownloadingFilename
 		)
-		_optionalTransferDoneSeeding = try ApiVersionRequirement(current: apiVersion, required: 17) {
+		_transferDoneSeeding = try Self.transferDoneSeeding(apiVersion: apiVersion) {
 			try Script(
 				from: decoder,
 				enabledKey: .transferDoneSeedingEnabled,

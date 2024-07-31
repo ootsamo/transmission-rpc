@@ -7,8 +7,8 @@ public struct VersionInformation: Decodable {
 	}
 
 	/// The current API semantic version.
-	public var semanticApiVersion: SemanticVersion { get throws { try _optionalSemanticApiVersion.unwrappedValue }}
-	@ApiVersionRequirement var optionalSemanticApiVersion: SemanticVersion?
+	@VersionRequirement(17)
+	public var semanticApiVersion: SemanticVersion
 
 	/// The current API version.
 	public let apiVersion: Int
@@ -22,7 +22,7 @@ public struct VersionInformation: Decodable {
 	public init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 		apiVersion = try container.decode(forKey: .apiVersion)
-		_optionalSemanticApiVersion = try ApiVersionRequirement(current: apiVersion, required: 17) {
+		_semanticApiVersion = try Self.semanticApiVersion(apiVersion: apiVersion) {
 			try container.decode(forKey: .semanticApiVersion)
 		}
 		minimumApiVersion = try container.decode(forKey: .minimumApiVersion)
