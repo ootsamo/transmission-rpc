@@ -27,6 +27,7 @@ public class TransmissionClient {
 		self.init(url: url, credentials: credentials)
 	}
 
+	@discardableResult
 	private func send<T: Method>(method: T) async throws -> T.Response {
 		if networking.apiVersion == nil {
 			let apiVersion = try await networking.send(method: GetApiVersionMethod()).apiVersion
@@ -44,5 +45,9 @@ public class TransmissionClient {
 
 	public func getTorrents(_ filter: TorrentFilter = .all) async throws -> [Torrent] {
 		try await send(method: GetTorrentMethod(filter: filter)).torrents
+	}
+
+	public func startTorrents(_ filter: TorrentFilter) async throws {
+		try await send(method: StartTorrentMethod(filter: filter))
 	}
 }
