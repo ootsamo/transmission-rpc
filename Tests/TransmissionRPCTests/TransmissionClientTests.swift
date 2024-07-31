@@ -1,15 +1,17 @@
-import XCTest
-@testable import TransmissionRPC
+import Testing
+import Foundation
+import TransmissionRPC
 
-final class TransmissionClientTests: XCTestCase {
-	func testClientInitialization() {
-		XCTAssertNoThrow(try TransmissionClient(host: "example.com", path: "/dev/null"))
+struct TransmissionClientTests {
+	@Test("Initialization succeeds")
+	func initialization() throws {
+		_ = try TransmissionClient(host: "example.com", path: "/dev/null")
+	}
 
-		XCTAssertThrowsError(try TransmissionClient(host: "example.com", path: "dev/null")) {
-			guard case .invalidURLComponents = $0 as? TransmissionError else {
-				XCTFail("Incorrect error thrown: \($0)")
-				return
-			}
+	@Test("Initialization fails with an invalid URL")
+	func invalidURL() {
+		#expect(throws: TransmissionError.invalidURLComponents) {
+			try TransmissionClient(host: "example.com", path: "dev/null")
 		}
 	}
 }
