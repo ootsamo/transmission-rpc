@@ -50,4 +50,8 @@ public class TransmissionClient {
 	public func startTorrents(_ filter: TorrentFilter) async throws {
 		try await send(method: StartTorrentMethod(filter: filter))
 	}
+
+	public func stopTorrents(_ filter: TorrentFilter) async throws {
+		try await send(method: StopTorrentMethod(filter: filter))
+	}
 }
