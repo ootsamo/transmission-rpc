@@ -8,8 +8,8 @@ public struct Session: Decodable {
 	public let units: SessionUnits
 
 	/// List of default tracker URLs.
-	public var defaultTrackers: TrackerConfiguration { get throws { try _optionalDefaultTrackers.unwrappedValue }}
-	@ApiVersionRequirement var optionalDefaultTrackers: TrackerConfiguration?
+	@VersionRequirement(17)
+	public var defaultTrackers: TrackerConfiguration
 
 	/// Configuration for peer limits and connection information.
 	public let peerConfiguration: PeerConfiguration
@@ -34,7 +34,7 @@ public struct Session: Decodable {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 
 		units = try container.decode(forKey: .units)
-		_optionalDefaultTrackers = try ApiVersionRequirement(current: apiVersion, required: 17) {
+		_defaultTrackers = try Self.defaultTrackers(apiVersion: apiVersion) {
 			try TrackerConfiguration(from: decoder)
 		}
 		peerConfiguration = try PeerConfiguration(from: decoder)

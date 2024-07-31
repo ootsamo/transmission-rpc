@@ -16,8 +16,8 @@ public struct Tracker: Decodable {
 	public let tier: Int
 
 	/// The site name of the tracker.
-	public var sitename: String { get throws { try _optionalSitename.unwrappedValue }}
-	@ApiVersionRequirement var optionalSitename: String?
+	@VersionRequirement(17)
+	public var sitename: String
 
 	/// The URL to use for announce requests.
 	public let announceURL: URL
@@ -30,7 +30,7 @@ public struct Tracker: Decodable {
 		let apiVersion = decoder.userInfo[.apiVersion] as? Int
 		id = try container.decode(forKey: .id)
 		tier = try container.decode(forKey: .tier)
-		_optionalSitename = try ApiVersionRequirement(current: apiVersion, required: 17) {
+		_sitename = try Self.sitename(apiVersion: apiVersion) {
 			try container.decode(forKey: .sitename)
 		}
 		announceURL = try container.decode(forKey: .announceURL)
